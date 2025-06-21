@@ -29,29 +29,28 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Create session middleware that can be shared with Socket.io
+// Session Middleware
 const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  secret: process.env.SESSION_SECRET || (() => {
+    console.warn("⚠️ SESSION_SECRET is missing in .env. Using fallback key.");
+    return 'your-secret-key';
+  })(),
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production', // HTTPS in production
+    secure: false,               // ✅ Force false for HTTP on Render
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     httpOnly: true,
-    sameSite: 'strict'
+    sameSite: 'lax'              // ✅ 'strict' can block session cookie; use 'lax'
   }
 });
 
 // Use session middleware in Express
 app.use(sessionMiddleware);
 
-// Initialize passport
 // app.use(passport.initialize());
 // app.use(passport.session());
 app.use(flash());
-
-// Configure passport
-// require('./config/passport')(passport, pool);
 
 // Debug middleware
 app.use((req, res, next) => {
@@ -79,7 +78,6 @@ app.get('/posts', (req, res) => {
 app.use('/api/comments', require('./routes/commentRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
 
-// Root route
 app.get('/', (req, res) => {
   if (req.session && req.session.user) {
     return res.redirect('/dashboard');
@@ -87,19 +85,21 @@ app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-// Socket.io setup with session support
+// ✅ Optional: Session debug route
+app.get('/session-debug', (req, res) => {
+  res.json({ session: req.session });
+});
+
+// Socket.io with session support
 io.use((socket, next) => {
   try {
     const req = socket.request;
     if (req.headers.cookie) {
-      // Parse session from cookie directly if needed
       const sessionID = req.headers.cookie.split(';').find(c => c.trim().startsWith('connect.sid='));
       if (sessionID) {
         console.log('Socket connection with session ID:', sessionID);
       }
     }
-    
-    // Continue with session middleware
     sessionMiddleware(req, {}, next);
   } catch (err) {
     console.error('Socket session error:', err);
@@ -107,49 +107,35 @@ io.use((socket, next) => {
   }
 });
 
-// Socket.io connection handling
+// Socket.io events
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
-  
-  // Store user information if authenticated
+
   if (socket.request.session && socket.request.session.user) {
     const userId = socket.request.session.user.id;
     socket.join(`user_${userId}`);
     console.log(`User ${userId} joined their room`);
-    
-    // Notify user is online
     socket.broadcast.emit('user_status', { userId, status: 'online' });
-    
-    // Store user ID in socket for later use
     socket.userId = userId;
   }
-  
+
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-    
-    // Notify user is offline if they were authenticated
     if (socket.userId) {
       socket.broadcast.emit('user_status', { userId: socket.userId, status: 'offline' });
     }
   });
-  
-  // Handle private messages with improved delivery
+
   socket.on('privateMessage', (data, callback) => {
     try {
       console.log('Received private message for user:', data.recipient_id);
-      
-      // Broadcast to all clients (for testing)
       io.emit('newMessage', data.message);
-      
-      // Acknowledge message receipt to sender
       socket.emit('messageSent', { 
         messageId: data.message.id || 'temp_' + Date.now(),
         recipientId: data.recipient_id,
         status: 'sent',
         timestamp: new Date()
       });
-      
-      // Send callback if provided
       if (typeof callback === 'function') {
         callback({ success: true });
       }
@@ -160,16 +146,14 @@ io.on('connection', (socket) => {
       }
     }
   });
-  
-  // Handle typing indicators
+
   socket.on('typing', (data) => {
     io.to(`user_${data.recipient_id}`).emit('userTyping', {
       userId: data.sender_id,
       isTyping: data.isTyping
     });
   });
-  
-  // Handle message read receipts
+
   socket.on('messageRead', (data) => {
     io.to(`user_${data.sender_id}`).emit('messageStatus', {
       messageIds: data.messageIds,
@@ -177,8 +161,7 @@ io.on('connection', (socket) => {
       timestamp: new Date()
     });
   });
-  
-  // Handle reconnection and sync
+
   socket.on('syncMessages', (data, callback) => {
     if (typeof callback === 'function') {
       callback({ success: true, timestamp: new Date() });
@@ -186,7 +169,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(500).json({ 
