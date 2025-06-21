@@ -1,0 +1,76 @@
+<div class="comments-section" id="comments-<%= post.id %>">
+    <div class="comments-header">
+      <h4>Comments (<%= post.comment_count %>)</h4>
+      <button class="toggle-comments" data-postid="<%= post.id %>">
+        <i class="fas fa-comments"></i> View Comments
+      </button>
+    </div>
+    
+    <div class="comments-list" id="comments-list-<%= post.id %>" style="display: none;">
+      <% if (post.comments && post.comments.length > 0) { %>
+        <% post.comments.forEach(comment => { %>
+          <div class="comment" id="comment-<%= comment.id %>">
+            <div class="comment-header">
+              <img src="<%= comment.avatar || '/images/default-avatar.png' %>" 
+                   alt="<%= comment.username %>" 
+                   class="comment-avatar">
+              <div class="comment-user">
+                <span class="comment-username"><%= comment.username %></span>
+                <span class="comment-time"><%= new Date(comment.created_at).toLocaleString() %></span>
+              </div>
+              <% if (user && user.id === comment.user_id) { %>
+                <button class="delete-comment" 
+                        data-commentid="<%= comment.id %>" 
+                        data-postid="<%= post.id %>">
+                  <i class="fas fa-trash"></i>
+                </button>
+              <% } %>
+            </div>
+            <div class="comment-content"><%= comment.content %></div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+      <% } %>
+    </div>
+    
+    <% if (user) { %>
+      <form class="comment-form" data-postid="<%= post.id %>">
+        <div class="comment-input">
+          <img src="<%= user.avatar || '/images/default-avatar.png' %>" alt="<%= user.username %>">
+          <textarea placeholder="Write a comment..." required></textarea>
+        </div>
+        <button type="submit">Post Comment</button>
+      </form>
+    <% } %>
+  </div>
+  
+  <script>
+    // Toggle comments visibility
+    document.querySelectorAll('.toggle-comments').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const postId = this.dataset.postid;
+        const commentsList = document.getElementById(`comments-list-${postId}`);
+        
+        // If comments are hidden and not loaded, fetch them
+        if (commentsList.style.display === 'none' && !commentsList.dataset.loaded) {
+          try {
+            const response = await fetch(`/api/comments/${postId}`);
+            const comments = await response.json();
+            
+            // Update the comments list (implementation depends on your frontend framework)
+            updateCommentsList(postId, comments);
+            commentsList.dataset.loaded = true;
+          } catch (err) {
+            console.error('Error loading comments:', err);
+          }
+        }
+        
+        // Toggle visibility
+        commentsList.style.display = commentsList.style.display === 'none' ? 'block' : 'none';
+        this.innerHTML = commentsList.style.display === 'none' 
+          ? '<i class="fas fa-comments"></i> View Comments' 
+          : '<i class="fas fa-times"></i> Hide Comments';
+      });
+    });
+  </script>

@@ -1,0 +1,418 @@
+/* Layout CSS - Center content and improve overall design */
+
+/* Main container */
+.container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* Center content */
+.main-content {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 250px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 20px;
+  background-color: #fff;
+  border-right: 1px solid #e6ecf0;
+}
+
+/* Right sidebar */
+.right-sidebar {
+  width: 300px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+/* Post card styling */
+.post-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Post header with user info */
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #f5f8fa;
+}
+
+.post-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.post-user-info {
+  flex: 1;
+}
+
+.post-username {
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #14171a;
+}
+
+.post-time {
+  font-size: 0.8rem;
+  color: #657786;
+}
+
+/* Post content */
+.post-content {
+  padding: 15px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+/* Post media */
+.post-media {
+  max-height: 500px;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* Post actions (like, comment) */
+.post-actions {
+  display: flex;
+  padding: 10px 15px;
+  border-top: 1px solid #f5f8fa;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  color: #657786;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.post-actions button:hover {
+  color: #1da1f2;
+}
+
+.post-actions button i {
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+/* Post form */
+.post-form {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-textarea {
+  border: none;
+  resize: none;
+  width: 100%;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  outline: none;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding: 0 15px;
+  }
+  
+  .right-sidebar {
+    width: 250px;
+  }
+}
+
+@media (max-width: 992px) {
+  .right-sidebar {
+    display: none;
+  }
+  
+  .sidebar {
+    width: 70px;
+  }
+  
+  .sidebar span {
+    display: none;
+  }
+  
+  .main-content {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    z-index: 1000;
+    border-top: 1px solid #e6ecf0;
+    border-right: none;
+    padding: 10px;
+  }
+  
+  .sidebar ul {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 60px;
+  }
+}
+
+/* Navigation styling */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  color: #14171a;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 30px;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: rgba(29, 161, 242, 0.1);
+  color: #1da1f2;
+}
+
+.sidebar a.active {
+  color: #1da1f2;
+  font-weight: 700;
+}
+
+.sidebar i {
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+/* Profile section in sidebar */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #1da1f2;
+  border-color: #1da1f2;
+  border-radius: 30px;
+  font-weight: bold;
+  padding: 8px 20px;
+}
+
+.btn-primary:hover {
+  background-color: #1a91da;
+  border-color: #1a91da;
+}
+
+.btn-outline-primary {
+  color: #1da1f2;
+  border-color: #1da1f2;
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(29, 161, 242, 0.1);
+  color: #1da1f2;
+}
+
+/* Comments section */
+.comments-section {
+  padding: 10px 15px;
+  border-top: 1px solid #f5f8fa;
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 10px;
+  padding: 10px 0;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.comment-content {
+  flex: 1;
+  background-color: #f5f8fa;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.comment-username {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Search bar */
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border: 1px solid #e6ecf0;
+  border-radius: 30px;
+  background-color: #f5f8fa;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #657786;
+}
+
+/* Trending section */
+.trending-section {
+  background-color: #f5f8fa;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.trending-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.trending-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #e6ecf0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.trending-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.trending-item .topic {
+  font-size: 13px;
+  color: #657786;
+}
+
+.trending-item .tag {
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.trending-item .posts-count {
+  font-size: 13px;
+  color: #657786;
+}
+
+/* Who to follow section */
+.suggestions-section {
+  background-color: #f5f8fa;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e6ecf0;
+}
+
+.suggestion-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.suggestion-info {
+  flex: 1;
+}
+
+.suggestion-info .name {
+  font-weight: bold;
+}
+
+.suggestion-info .username {
+  font-size: 14px;
+  color: #657786;
+}
+
+/* Utility classes */
+.text-primary {
+  color: #1da1f2 !important;
+}
+
+.bg-primary {
+  background-color: #1da1f2 !important;
+}

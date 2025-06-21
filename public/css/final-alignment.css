@@ -1,0 +1,82 @@
+/* Final alignment fixes for profile and messages pages */
+
+/* Profile page specific fixes */
+.profile-content {
+  width: 50% !important;
+  margin: 0 auto !important;
+  padding: 0 15px !important;
+}
+
+.profile-header {
+  margin-top: 20px !important;
+}
+
+.profile-info {
+  position: relative !important;
+  padding: 20px !important;
+  min-height: 120px !important;
+}
+
+.profile-avatar {
+  position: absolute !important;
+  top: -50px !important;
+  left: 20px !important;
+  z-index: 2 !important;
+}
+
+.profile-details {
+  margin-left: 120px !important;
+  padding-top: 10px !important;
+}
+
+/* Messages page specific fixes */
+.messages-container {
+  width: 70% !important;
+  margin: 20px auto !important;
+  height: calc(100vh - 120px) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.contacts-sidebar {
+  width: 30% !important;
+  min-width: 250px !important;
+}
+
+.chat-area {
+  flex: 1 !important;
+}
+
+/* Mobile fixes */
+@media (max-width: 992px) {
+  .profile-content, .messages-container {
+    width: 90% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-content, .messages-container {
+    width: 100% !important;
+  }
+  
+  .profile-avatar {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .profile-details {
+    margin-left: 0 !important;
+    text-align: center !important;
+    padding-top: 60px !important;
+  }
+  
+  .messages-container {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+  
+  .contacts-sidebar {
+    width: 100% !important;
+    max-height: 300px !important;
+  }
+}

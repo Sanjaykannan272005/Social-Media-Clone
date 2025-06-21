@@ -1,0 +1,247 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- User profile card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="<%= user.avatar || '/images/default-avatar.png' %>" class="rounded-circle mb-3" width="100" height="100" alt="<%= user.username %>">
+                    <h5 class="card-title"><%= user.username %></h5>
+                    <p class="card-text text-muted"><%= user.email %></p>
+                    <a href="/profile" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="list-group mb-4">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="fas fa-home me-2"></i> Home
+                </a>
+                <a href="/posts" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-newspaper me-2"></i> Posts
+                </a>
+                <a href="/messages" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope me-2"></i> Messages
+                </a>
+                <a href="/profile" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user me-2"></i> Profile
+                </a>
+                <a href="/settings" class="list-group-item list-group-item-action">
+                    <i class="fas fa-cog me-2"></i> Settings
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <!-- Post creation form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Create a post</h5>
+                    <form id="postForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <textarea class="form-control" id="postContent" rows="3" placeholder="What's happening?"></textarea>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="mediaUpload" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-image"></i> Add Photo/Video
+                            </label>
+                            <input type="file" id="mediaUpload" name="media" accept="image/*,video/*" style="display: none;">
+                            <span id="mediaFileName" class="ml-2"></span>
+                        </div>
+                        <div id="mediaPreview" class="mt-2" style="display: none;">
+                            <img id="imagePreview" class="img-fluid rounded" style="max-height: 200px; display: none;">
+                            <video id="videoPreview" class="img-fluid rounded" controls style="max-height: 200px; display: none;"></video>
+                            <button type="button" class="btn btn-sm btn-danger mt-1" id="removeMedia">Remove</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Post</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Posts feed -->
+            <div id="postsFeed">
+                <!-- Posts will be loaded here -->
+                <div class="text-center" id="loadingPosts">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <!-- Suggestions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    Who to follow
+                </div>
+                <div class="card-body p-0">
+                    <div id="suggestedUsers">
+                        <div class="text-center py-3">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postForm = document.getElementById('postForm');
+        const mediaUpload = document.getElementById('mediaUpload');
+        const mediaFileName = document.getElementById('mediaFileName');
+        const mediaPreview = document.getElementById('mediaPreview');
+        const imagePreview = document.getElementById('imagePreview');
+        const videoPreview = document.getElementById('videoPreview');
+        const removeMedia = document.getElementById('removeMedia');
+        const postsFeed = document.getElementById('postsFeed');
+        const loadingPosts = document.getElementById('loadingPosts');
+        
+        // Handle media file selection
+        mediaUpload.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                mediaFileName.textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (file.type.startsWith('image/')) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        videoPreview.style.display = 'none';
+                    } else if (file.type.startsWith('video/')) {
+                        videoPreview.src = e.target.result;
+                        videoPreview.style.display = 'block';
+                        imagePreview.style.display = 'none';
+                    }
+                    mediaPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Remove selected media
+        removeMedia.addEventListener('click', function() {
+            mediaUpload.value = '';
+            mediaFileName.textContent = '';
+            mediaPreview.style.display = 'none';
+            imagePreview.src = '';
+            videoPreview.src = '';
+        });
+        
+        // Handle post submission
+        postForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const content = document.getElementById('postContent').value.trim();
+            if (!content && !mediaUpload.files[0]) {
+                alert('Please enter some content or add media to post.');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('content', content);
+            
+            if (mediaUpload.files[0]) {
+                formData.append('media', mediaUpload.files[0]);
+            }
+            
+            try {
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const post = await response.json();
+                    // Reset form
+                    postForm.reset();
+                    mediaFileName.textContent = '';
+                    mediaPreview.style.display = 'none';
+                    
+                    // Add new post to feed
+                    addPostToFeed(post, true);
+                } else {
+                    const error = await response.json();
+                    alert('Error creating post: ' + (error.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Error creating post:', err);
+                alert('Error creating post. Please try again.');
+            }
+        });
+        
+        // Load posts on page load
+        loadPosts();
+        
+        async function loadPosts() {
+            try {
+                const response = await fetch('/api/posts');
+                if (response.ok) {
+                    const posts = await response.json();
+                    loadingPosts.style.display = 'none';
+                    
+                    if (posts.length === 0) {
+                        postsFeed.innerHTML = '<div class="alert alert-info">No posts yet. Be the first to post!</div>';
+                    } else {
+                        postsFeed.innerHTML = '';
+                        posts.forEach(post => addPostToFeed(post));
+                    }
+                } else {
+                    loadingPosts.style.display = 'none';
+                    postsFeed.innerHTML = '<div class="alert alert-danger">Failed to load posts. Please refresh the page.</div>';
+                }
+            } catch (err) {
+                console.error('Error loading posts:', err);
+                loadingPosts.style.display = 'none';
+                postsFeed.innerHTML = '<div class="alert alert-danger">Failed to load posts. Please refresh the page.</div>';
+            }
+        }
+        
+        function addPostToFeed(post, prepend = false) {
+            const postElement = document.createElement('div');
+            postElement.className = 'card mb-3';
+            postElement.dataset.postId = post.id;
+            
+            let mediaHtml = '';
+            if (post.media_url) {
+                if (post.media_type === 'image') {
+                    mediaHtml = `<img src="${post.media_url}" class="card-img-top" alt="Post image">`;
+                } else if (post.media_type === 'video') {
+                    mediaHtml = `<video src="${post.media_url}" class="card-img-top" controls></video>`;
+                }
+            }
+            
+            const createdAt = new Date(post.created_at);
+            const formattedDate = createdAt.toLocaleString();
+            
+            postElement.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="${post.avatar || '/images/default-avatar.png'}" class="rounded-circle me-2" width="40" height="40" alt="${post.username}">
+                        <div>
+                            <h6 class="mb-0">${post.username}</h6>
+                            <small class="text-muted">${formattedDate}</small>
+                        </div>
+                    </div>
+                    <p class="card-text">${post.content}</p>
+                    ${mediaHtml}
+                </div>
+            `;
+            
+            if (prepend) {
+                postsFeed.prepend(postElement);
+            } else {
+                postsFeed.appendChild(postElement);
+            }
+        }
+    });
+</script>
+<script src="/js/suggestions.js"></script>
+</body>
+</html>

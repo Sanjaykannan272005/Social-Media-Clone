@@ -1,0 +1,243 @@
+/* Right Sidebar Styles */
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+}
+
+.right-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.right-sidebar::-webkit-scrollbar-thumb {
+    background: #ccd6dd;
+    border-radius: 10px;
+}
+
+/* Trending Section */
+.trending-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.trending-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #14171a;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.trending-section h3 i {
+    margin-right: 10px;
+    color: #1da1f2;
+}
+
+.trending-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f8fa;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.trending-item:last-child {
+    border-bottom: none;
+}
+
+.trending-item:hover {
+    background: #f8f9fa;
+}
+
+.trending-item .topic {
+    font-size: 13px;
+    color: #657786;
+    margin-bottom: 2px;
+}
+
+.trending-item .tag {
+    font-weight: bold;
+    font-size: 15px;
+    color: #14171a;
+    margin-bottom: 4px;
+}
+
+.trending-item .posts-count {
+    font-size: 13px;
+    color: #657786;
+}
+
+/* Suggestions Section */
+.suggestions-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.suggestions-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #14171a;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.suggestions-section h3 i {
+    margin-right: 10px;
+    color: #1da1f2;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f8fa;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.suggestion-info {
+    flex: 1;
+}
+
+.suggestion-info .name {
+    font-weight: bold;
+    color: #14171a;
+    margin-bottom: 2px;
+}
+
+.suggestion-info .username {
+    font-size: 14px;
+    color: #657786;
+}
+
+.suggestion-item .follow-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid #1da1f2;
+    background: white;
+    color: #1da1f2;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestion-item .follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.suggestion-item .follow-btn.following {
+    background: #1da1f2;
+    color: white;
+}
+
+/* News Section */
+.news-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.news-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #14171a;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.news-section h3 i {
+    margin-right: 10px;
+    color: #1da1f2;
+}
+
+.news-item {
+    display: flex;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f8fa;
+    cursor: pointer;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+}
+
+.news-item:hover .news-title {
+    color: #1da1f2;
+}
+
+.news-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.news-content {
+    flex: 1;
+}
+
+.news-title {
+    font-weight: bold;
+    color: #14171a;
+    margin-bottom: 4px;
+    transition: color 0.2s;
+}
+
+.news-source {
+    font-size: 13px;
+    color: #657786;
+    display: flex;
+    align-items: center;
+}
+
+.news-source i {
+    font-size: 4px;
+    margin: 0 6px;
+}
+
+.news-time {
+    font-size: 13px;
+    color: #657786;
+}
+
+/* Footer */
+.sidebar-footer {
+    margin-top: 10px;
+    padding: 15px;
+    font-size: 13px;
+    color: #657786;
+    text-align: center;
+}
+
+.sidebar-footer a {
+    color: #657786;
+    margin: 0 5px;
+    text-decoration: none;
+}
+
+.sidebar-footer a:hover {
+    text-decoration: underline;
+    color: #1da1f2;
+}

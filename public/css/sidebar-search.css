@@ -1,0 +1,117 @@
+/* Sidebar Search Styles */
+.sidebar-search-container {
+    position: relative;
+    margin: 15px 0;
+    padding: 0 10px;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #f5f8fa;
+    transition: all 0.2s ease;
+}
+
+.sidebar-search-input:focus {
+    background-color: #fff;
+    border-color: #1da1f2;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.2);
+    outline: none;
+}
+
+.sidebar-search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #657786;
+    font-size: 14px;
+}
+
+.sidebar-search-results {
+    position: absolute;
+    top: 100%;
+    left: 10px;
+    right: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 5px;
+}
+
+.sidebar-search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e1e8ed;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.sidebar-search-result-item:hover {
+    background: #f8f9fa;
+}
+
+.sidebar-search-result-item:last-child {
+    border-bottom: none;
+}
+
+.sidebar-search-result-item .avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.sidebar-search-result-item .user-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar-search-result-item .username {
+    font-weight: bold;
+    color: #14171a;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.sidebar-search-result-item .bio {
+    font-size: 12px;
+    color: #657786;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-search-result-item .follow-btn {
+    padding: 4px 10px;
+    border-radius: 15px;
+    border: 1px solid #1da1f2;
+    background: white;
+    color: #1da1f2;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 5px;
+}
+
+.sidebar-search-result-item .follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.sidebar-search-result-item .follow-btn.following {
+    background: #1da1f2;
+    color: white;
+}

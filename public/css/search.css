@@ -1,0 +1,89 @@
+#searchResults {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.search-container {
+    position: relative;
+}
+
+.clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+    z-index: 10;
+    display: none;
+}
+
+.clear-search:hover {
+    color: #dc3545;
+}
+
+#searchResults .user-item {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+#searchResults .user-item:hover {
+    background-color: #f8f9fa;
+}
+
+#searchResults .user-item:last-child {
+    border-bottom: none;
+}
+
+#searchResults .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#searchResults .user-info {
+    margin-left: 10px;
+    flex-grow: 1;
+}
+
+#searchResults .user-name {
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+#searchResults .user-bio {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+#searchResults .follow-btn {
+    min-width: 80px;
+}
+
+/* Loading indicator */
+#searchResults .loading {
+    text-align: center;
+    padding: 10px;
+}
+
+/* Empty results message */
+#searchResults .empty-results {
+    text-align: center;
+    padding: 15px;
+    color: #6c757d;
+}
+
+/* Error message */
+#searchResults .error-message {
+    text-align: center;
+    padding: 15px;
+    color: #dc3545;
+}
